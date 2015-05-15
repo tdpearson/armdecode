@@ -656,23 +656,23 @@ class _branch_branch_with_link_and_block_data_transfer():  # TODO: Confirm
 class _coprocessor_instructions_and_supervisor_call():
     """
     op1:00000x =               UDF  ()
-    op1:11xxxx =               SVC  (imm24)                                         #a8-720
+    op1:11xxxx =               SVC  (imm24)                                         A1   #a8-720
     coproc:!101x
-        op1:0xxxx0 | !000x00 = STC  (P, U, D, W, Rn, CRd, coproc, imm8)             #a8-662
+        op1:0xxxx0 | !000x00 = STC  (P, U, D, W, Rn, CRd, coproc, imm8)             A1   #a8-662
         op1:0xxxx1 | !000x01
-            Rn:!1111 =         LDC  (P, U, D, W, Rn, CRd, coproc, imm8)             #a8-392 - immediate
-            Rn:1111  =         LDC  (P, U, D, W, CRd, coproc, imm8)                 #a8-394 - literal
-        op1:000100 =           MCRR (Rt2, Rt, coproc, opc1, CRm)                    #a8-478
-        op1:000101 =           MRRC (Rt2, Rt, coproc, opc1, CRm)                    #a8-494
-        op1:10xxxx + op:0 =    CDP  (opc1_2, CRn, CRd, coproc, opc2, CRm)           #a8-358
-        op1:10xxx0 + op:1 =    MCR  (opc1_2, CRn, CRd, coproc, opc2, CRm)           #a8-476
-        op1:10xxx1 + op:1 =    MRC  (opc1_3, CRn, Rt, coproc, opc2, CRm)            #a8-492
+            Rn:!1111 =         LDC  (P, U, D, W, Rn, CRd, coproc, imm8)             A1-I #a8-392 - immediate
+            Rn:1111  =         LDC  (P, U, D, W, CRd, coproc, imm8)                 A1-L #a8-394 - literal
+        op1:000100 =           MCRR (Rt2, Rt, coproc, opc1, CRm)                    A1   #a8-478
+        op1:000101 =           MRRC (Rt2, Rt, coproc, opc1, CRm)                    A1   #a8-494
+        op1:10xxxx + op:0 =    CDP  (opc1_2, CRn, CRd, coproc, opc2, CRm)           A1   #a8-358
+        op1:10xxx0 + op:1 =    MCR  (opc1_2, CRn, CRd, coproc, opc2, CRm)           A1   #a8-476
+        op1:10xxx1 + op:1 =    MRC  (opc1_3, CRn, Rt, coproc, opc2, CRm)            A1   #a8-492
     coproc:101x
-        op1:0xxxxx | !000x0x = _extension_register_load_store_instructions          #a7-274
-        op1:00010x =           _64bit_transfers_arm_core_extension_registers        #a7-279
+        op1:0xxxxx | !000x0x = _extension_register_load_store_instructions               #a7-274
+        op1:00010x =           _64bit_transfers_arm_core_extension_registers             #a7-279
         op1:10xxxx
-            op:0 =             _floating_point_data_processing_instructions         #a7-272
-            op:1 =             _8_16_32bit_transfer_arm_core_extension_registers    #a7-278
+            op:0 =             _floating_point_data_processing_instructions              #a7-272
+            op:1 =             _8_16_32bit_transfer_arm_core_extension_registers         #a7-278
 
     """
     positions = {'op':     [4,  1],
@@ -701,19 +701,19 @@ class _coprocessor_instructions_and_supervisor_call():
 @instruction_decoder
 class _extension_register_load_store_instructions():  # TODO: Confirm
     """
-    opcode:0010x = _64bit_transfers_arm_core_extension_registers    #A7-279
-    opcode:01x00 = VSTM  (P, U, D, W, Rn, Vd, imm8)                 #a8-1080 - no writeback TODO: confirm A1 encoding
-    opcode:01x10 = VSTM  (P, U, D, W, Rn, Vd, imm8)                 #a8-1080
-    opcode:1xx00 = VSRT  (U, D, Rn, Vd, imm8)                       #a8-1082
+    opcode:0010x = _64bit_transfers_arm_core_extension_registers       #A7-279
+    opcode:01x00 = VSTM  (P, U, D, W, Rn, Vd, imm8)                 A1 #a8-1080 - IA no writeback
+    opcode:01x10 = VSTM  (P, U, D, W, Rn, Vd, imm8)                 A1 #a8-1080 - IA writeback
+    opcode:1xx00 = VSTR  (U, D, Rn, Vd, imm8)                       A1 #a8-1082
     opcode:10x10
-        Rn:!1101 = VSTM  (P, U, D, W, Rn, Vd, imm8)                 #a8-1080
-        Rn:1101  = VPUSH (D, Vd, imm8)                              #a8-992
-    opcode:01x01 = VLDM  (P, U, D, W, Rn, Vd, imm8)                 #a8-922 - no writeback
+        Rn:!1101 = VSTM  (P, U, D, W, Rn, Vd, imm8)                 A1 #a8-1080 - DB writeback
+        Rn:1101  = VPUSH (D, Vd, imm8)                              A1 #a8-992
+    opcode:01x01 = VLDM  (P, U, D, W, Rn, Vd, imm8)                 A1 #a8-922 - IA no writeback
     opcode:1xx01
-        Rn:!1101 = VLDM  (P, U, D, W, Rn, Vd, imm8)                 #a8-922
-        Rn:1101  = VPOP  (D, Vd, imm8)                              #a8-990
-    opcode:1x001 = VLDR  (U, D, Rn, Vd, imm8)                       #a8-924
-    opcode:10x11 = VLDM  (P, U, D, W, Rn, Vd, imm8)                 #a8-922 - Decrement before, writeback
+        Rn:!1101 = VLDM  (P, U, D, W, Rn, Vd, imm8)                 A1 #a8-922 - IA writeback
+        Rn:1101  = VPOP  (D, Vd, imm8)                              A1 #a8-990
+    opcode:1x001 = VLDR  (U, D, Rn, Vd, imm8)                       A1 #a8-924
+    opcode:10x11 = VLDM  (P, U, D, W, Rn, Vd, imm8)                 A1 #a8-922 - DB writeback
     """
     positions = {'Rn':     [16, 4],
                  'opcode': [20, 5]}
