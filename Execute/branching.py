@@ -1,4 +1,4 @@
-v__author__ = 'tdp'
+__author__ = 'tdp'
 
 from Decode.utils import signed_int, sign_extend
 
@@ -61,6 +61,7 @@ class Branching():
             I2 = 1 ^ (args['J2'] ^ args['S'])
             delta = signed_int((args['S'] << 23 | I1 << 22 | I2 << 21 | args['imm10'] << 11 | args['imm11']) << 1)
             self.registers.PC += delta
+            print('branched to %s with link back at %s' % (hex(self.registers.PC), hex(self.registers.LR)))
         if args['encoding'] == 'T2-I':  # BLX
             self.registers.LR = self.registers.PC - 2  # TODO: Confirm
             I1 = 1 ^ (args['J1'] ^ args['S'])
@@ -68,6 +69,7 @@ class Branching():
             delta = signed_int((args['S'] << 22 | I1 << 21 | I2 << 20 | args['imm10H'] << 10 | args['imm10L']) << 2)
             self.registers.PC += delta
             self.process_mode.CPSR.thumb_bit == 0
+            print('branched to %s with link back at %s and mode change to Arm' % (hex(self.registers.PC), hex(self.registers.LR)))
 
     def BX():
         pass
