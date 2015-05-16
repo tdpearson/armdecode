@@ -16,5 +16,5 @@ class Execute(object):
     def __call__(self, args):
         try:
             self.instruction[args['instr']](args)
-        except KeyError:
+        except (KeyError, NotImplementedError):
             print('unhandled: %s - %s' % (args['instr'], args['encoding']))

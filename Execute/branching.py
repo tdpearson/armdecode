@@ -72,13 +72,13 @@ class Branching():
             print('branched to %s with link back at %s and mode change to Arm' % (hex(self.registers.PC), hex(self.registers.LR)))
 
     def BX():
-        pass
+        raise NotImplementedError
 
     def BXJ():
-        pass
+        raise NotImplementedError
 
     def TBB():
-        pass
+        raise NotImplementedError
 
     def TBH():
-        pass
+        raise NotImplementedError
