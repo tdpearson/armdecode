@@ -10,8 +10,13 @@ class Execute(object):
             mod = import_module("Execute." + module_name)
             for cls in [obj for obj in mod.__dict__ if type(mod.__dict__[obj]) == type]:
                 cls_instance = mod.__dict__[cls](registers, process_mode, memory)
-                for cls_instr in [func for func in mod.__dict__[cls].__dict__ if '_' not in func]:
-                    self.instruction[cls_instr] = cls_instance[cls_instr]
+                for cls_instr in [func for func in mod.__dict__[cls].__dict__ if not func.startswith('_')]:
+                    try:
+                        self.instruction[cls_instr]
+                    except KeyError:
+                        self.instruction[cls_instr] = cls_instance[cls_instr]
+                    else:
+                        raise Warning('Multiple instruction handlers detected for "%s"' % cls_instr)
 
     def __call__(self, args):
         try:
