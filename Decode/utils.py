@@ -52,22 +52,22 @@ def test_arm_condition(val, cpsr):
     val = word aligned ARM instruction
     cpsr = current program status register
     """
-    cond = {0b0000: cpsr.zero_flag == 1, # Z set
-            0b0001: cpsr.zero_flag == 0, # Z clear
-            0b0010: cpsr.carry_flag == 1, # C set
-            0b0011: cpsr.carry_flag == 0, # C clear
-            0b0100: cpsr.negative_flag == 1, # N set
-            0b0101: cpsr.negative_flag == 0, # N clear
-            0b0110: cpsr.overflow_flag == 1, # V set
-            0b0111: cpsr.overflow_flag == 0, # V clear
-            0b1000: cpsr.carry_flag == 1 and cpsr.zero_flag == 0, # C set Z clear
-            0b1001: cpsr.carry_flag == 0 and cpsr.zero_flag == 1, # C clear Z set
-            0b1010: cpsr.negative_flag == cpsr.overflow_flag, # N and V the same
-            0b1011: cpsr.negative_flag != cpsr.overflow_flag, # N and V differ
-            0b1100: cpsr.zero_flag == 0 and (cpsr.negative_flag == cpsr.overflow_flag), # Z clear, N and V the same
-            0b1101: cpsr.zero_flag == 1 and (cpsr.negative_flag != cpsr.overflow_flag), # Z set, N and V differ
-            0b1110: True, # Any
-            0b1111: False, # Not Valid
+    cond = {0b0000: cpsr.zero_flag == 1,  # Z set
+            0b0001: cpsr.zero_flag == 0,  # Z clear
+            0b0010: cpsr.carry_flag == 1,  # C set
+            0b0011: cpsr.carry_flag == 0,  # C clear
+            0b0100: cpsr.negative_flag == 1,  # N set
+            0b0101: cpsr.negative_flag == 0,  # N clear
+            0b0110: cpsr.overflow_flag == 1,  # V set
+            0b0111: cpsr.overflow_flag == 0,  # V clear
+            0b1000: cpsr.carry_flag == 1 and cpsr.zero_flag == 0,  # C set Z clear
+            0b1001: cpsr.carry_flag == 0 and cpsr.zero_flag == 1,  # C clear Z set
+            0b1010: cpsr.negative_flag == cpsr.overflow_flag,  # N and V the same
+            0b1011: cpsr.negative_flag != cpsr.overflow_flag,  # N and V differ
+            0b1100: cpsr.zero_flag == 0 and (cpsr.negative_flag == cpsr.overflow_flag),  # Z clear, N and V the same
+            0b1101: cpsr.zero_flag == 1 and (cpsr.negative_flag != cpsr.overflow_flag),  # Z set, N and V differ
+            0b1110: True,  # Any
+            0b1111: False,  # Not Valid
             }
     return cond[val >> 28]
 
@@ -77,11 +77,11 @@ def binprint(val, bit_size):
 
 
 def hexprint(val, bit_size):
-    return "0x%s" % hex(val)[2:].zfill(bit_size / 4).replace("L","")
+    return "0x%s" % hex(val)[2:].zfill(bit_size / 4).replace("L", "")
 
 
 def register_list(val, size):
-    return [register for register,x in enumerate([val >> pos & 0b1 for pos in range(size)]) if x == 1]
+    return [register for register, x in enumerate([val >> pos & 0b1 for pos in range(size)]) if x == 1]
 
 
 def togglebit(val, pos):
@@ -115,31 +115,38 @@ def clearbit(val, pos):
 def ror(val, count=1, size=32, carry=False):
     #TODO: add carry functionality
     """Rotate Right"""
+    if carry:
+        raise NotImplementedError
     return ((val & ((1 << count) - 1)) << (size - count)) | (val >> count)
 
 
 def rrx(val, count=1, size=32, carry=False):
-    #TODO: add carry functionality
     #TODO: write out routine
     """Rotate Right with Extend"""
-    pass
+    raise NotImplementedError
 
 
 def lsl(val, count=1, size=32, carry=False):
     #TODO: add carry functionality
     """Logical Shift Left"""
+    if carry:
+        raise NotImplementedError
     return (val << count) & ((1 << size) - 1)
 
 
 def lsr(val, count=1, size=32, carry=False):
     #TODO: add carry functionality
     """Logical Shift Right"""
+    if carry:
+        raise NotImplementedError
     return val >> count
 
 
 def asr(val, count=1, size=32, carry=False):
     #TODO: add carry functionality
     """Arithmetic Shift Right"""
+    if carry:
+        raise NotImplementedError
     if getbit(val, size - 1):
         return ((1 << count) - 1) << (size - count) | val >> count
     return val >> count

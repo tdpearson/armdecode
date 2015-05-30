@@ -3,7 +3,7 @@ __author__ = 'tdp'
 from Decode.utils import signed_int, sign_extend
 
 
-class Branching():
+class Branching:
     def __init__(self, registers, process_mode, memory):
         self.registers = registers
         self.process_mode = process_mode
@@ -71,14 +71,14 @@ class Branching():
             self.process_mode.CPSR.thumb_bit = 0
             print('branched to %s with link back at %s and mode change to Arm' % (hex(self.registers.PC), hex(self.registers.LR)))
 
-    def BX():
+    def BX(self, args):
         raise NotImplementedError
 
-    def BXJ():
+    def BXJ(self, args):
         raise NotImplementedError
 
-    def TBB():
+    def TBB(self, args):
         raise NotImplementedError
 
-    def TBH():
+    def TBH(self, args):
         raise NotImplementedError
