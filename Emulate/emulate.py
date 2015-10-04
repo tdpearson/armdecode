@@ -47,10 +47,11 @@ class Emulate(object):
             instruction = unpack16(self.memory.read_blob(2, self.registers.PC))
             self.registers.PC += 2
             raise NotImplementedError('Thumb EE')
-        try:
-            action(decode)
-        except TypeError:
-            pass
+        #try:
+        #    action(decode)
+        #except TypeError:
+        #    pass
+        action(decode)
 
     def step(self, count=1, action=None):
         if not action:

@@ -100,7 +100,7 @@ def parse_line(line, **kwargs):
         if is_logic_token(token):
             text += ' %s ' % token.replace('+', '&')
             continue
-        if positions and token in positions:
+        if positions and token in positions and not returns_value:  # prevent collisions between positions and ops
             position = positions[token][0]
             continue
         if is_mask_template(token):
@@ -127,7 +127,11 @@ def parse_line(line, **kwargs):
         if token == "(":
             continue
         if ops and token in ops:
-            text += ", '%s': val >> %s & %s" % (token, ops[token][0], get_mask_by_size(ops[token][1]))
+            shift = ops[token][0]
+            shift_text = ", '%s': val & %s" % (token, get_mask_by_size(ops[token][1]))  # if no shift
+            if shift:
+                shift_text = ", '%s': val >> %s & %s" % (token, shift, get_mask_by_size(ops[token][1]))
+            text += shift_text
             while True:
                 try:
                     token = tokens.__next__()

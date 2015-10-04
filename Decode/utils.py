@@ -112,44 +112,8 @@ def clearbit(val, pos):
     return val & ~(1 << pos)
 
 
-def ror(val, count=1, size=32, carry=False):
-    #TODO: add carry functionality
-    """Rotate Right"""
-    if carry:
-        raise NotImplementedError
+def ror(val, count=1, size=32):
     return ((val & ((1 << count) - 1)) << (size - count)) | (val >> count)
-
-
-def rrx(val, count=1, size=32, carry=False):
-    #TODO: write out routine
-    """Rotate Right with Extend"""
-    raise NotImplementedError
-
-
-def lsl(val, count=1, size=32, carry=False):
-    #TODO: add carry functionality
-    """Logical Shift Left"""
-    if carry:
-        raise NotImplementedError
-    return (val << count) & ((1 << size) - 1)
-
-
-def lsr(val, count=1, size=32, carry=False):
-    #TODO: add carry functionality
-    """Logical Shift Right"""
-    if carry:
-        raise NotImplementedError
-    return val >> count
-
-
-def asr(val, count=1, size=32, carry=False):
-    #TODO: add carry functionality
-    """Arithmetic Shift Right"""
-    if carry:
-        raise NotImplementedError
-    if getbit(val, size - 1):
-        return ((1 << count) - 1) << (size - count) | val >> count
-    return val >> count
 
 
 def sign_extend(val, size=24, align=30):
