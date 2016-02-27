@@ -1,6 +1,6 @@
 from importlib import import_module
 
-_modules = ['branching', 'data_processing']
+_modules = ['branching', 'data_processing', 'exception_handling', 'load_store']
 
 class Execute(object):
     def __init__(self, registers, process_mode, memory):

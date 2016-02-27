@@ -70,3 +70,14 @@ def arm_expand_immediate(imm12, carry_in, expand_size=32):
     if rotate_amount:
         return _decode_ror(unrotated_value, rotate_amount, expand_size)
     return unrotated_value, carry_in
+
+
+def memory_access_read(memory, bytedata, position, size, aligned=True, unpriv=False):
+    # TODO - write code
+    pass
+
+
+def memory_access_write(memory, bytedata, position, aligned=True, unpriv=False):
+    # TODO - complete writing out
+    memory.write_blob(bytedata, position)
+

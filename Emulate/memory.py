@@ -2,6 +2,7 @@ import os
 import pickle
 import lzma
 
+
 class Memory(object):
     def __init__(self):
         self.page_size = 1024 ** 2  # 1MB
@@ -63,7 +64,6 @@ class Memory(object):
         except KeyError:
             self.page[page] = bytearray(self.page_size)
             self.page[page][offset:offset + data_length] = bytedata
-        # print('writing %s to page %s' % (bytedata, page))
 
     def save_page(self, page_number, filename):
         with open(filename, 'wb') as f:
