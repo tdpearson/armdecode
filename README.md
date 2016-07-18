@@ -58,5 +58,5 @@ with open('kernel.img', 'rb') as f:
         f.seek(0)
         emu.memory.write_blob(f.read(), 0x8000)
 
-emu.step(8, emu.execute)
+emu.step(emu.execute, count=8)
 ```

@@ -4,6 +4,9 @@ import re
 import shlex
 from inspect import cleandoc
 from sys import modules
+from functools import reduce
+from itertools import product
+from operator import or_
 
 
 class instruction_decoder(object):
@@ -16,6 +19,7 @@ class instruction_decoder(object):
         self._code = None
         self._code_dict = None
         self._bytecode = None
+        self.positions_mask = positionMask(cls.positions) if cls.positions else None
         #self._dict = {}
         self.module = modules[cls.__module__]
 
@@ -40,7 +44,8 @@ class instruction_decoder(object):
                 return self._code
             self._code = code_gen(True)
             return self._code
-        if name == 'code_dict':
+        elif name == 'code_dict':
+            # FIXME: This section needs to be rewritten - this will go towards enabling decoding using lookup dicts
             if self._code_dict:  # only generate code once then reuse
                 return self._code_dict
             self._code_dict = code_gen(False)
@@ -59,7 +64,7 @@ class instruction_decoder(object):
             func_code = "def func(val):\n%s\nmodified_val = func(val)" % indent_code(self.code)
             self._bytecode = compile(func_code, '<string>', 'exec')
         exec(self._bytecode, globals())
-        return modified_val
+        return modified_val  # this is set by the above exec
 
 
 def is_decoder_class(text):
@@ -113,7 +118,7 @@ def parse_line(line, **kwargs):
             returns_value = True
             text += ': return '
             token = tokens.__next__()
-            #token following '=' is either a class or an instruction
+            # token following '=' is either a class or an instruction
             if is_decoder_class(token):
                 if call_class:
                     text += '%s(val)' % token
@@ -200,3 +205,15 @@ def get_mask_by_size(size):
 def indent_code(text, count=4):
     indention = " " * count
     return indention + re.sub(r'\n', '\n%s' % indention, text)
+
+
+# The following two functions are to go towards enabling decoding using lookup dicts
+def positionMask(positions):
+    """ Generate mask to look at positional decoding parameters """
+    return reduce(or_, [((1 << size) - 1) << pos for pos, size in positions.values()])
+
+
+def decoderMasks(positions):
+    """ Generate list of masks using position values from instruction_decoder templates """
+    partialMasks = [[val << pos for val in range(1 << size)] for pos, size in positions.values()]
+    return [reduce(or_, partialMask) for partialMask in product(*partialMasks)]

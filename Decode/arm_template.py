@@ -1,5 +1,5 @@
-from Decode.decoder_tools import instruction_decoder
-from Decode.utils import ror
+from .decoder_tools import instruction_decoder
+from .utils import ror
 
 default_encoding = "A1"
 

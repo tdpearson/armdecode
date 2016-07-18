@@ -1,6 +1,6 @@
 __author__ = 'tdp'
 
-from Execute.utils import memory_access_read, memory_access_write
+from .utils import memory_access_read, memory_access_write
 
 
 class LoadStore:

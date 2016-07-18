@@ -1,6 +1,6 @@
 __author__ = 'tdp'
 
-from Decode.decoder_tools import instruction_decoder
+from .decoder_tools import instruction_decoder
 
 default_encoding = "T1"
 

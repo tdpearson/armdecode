@@ -1,5 +1,6 @@
 import struct
 
+
 def is32bitThumb(val):
     try:
         #if type(val) != int
@@ -159,3 +160,4 @@ def isOnesBit(val, size):
     if val == (1 << size) - 1:
         return 1
     return 0
+

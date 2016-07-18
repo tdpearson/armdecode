@@ -1,7 +1,7 @@
 from copy import copy
 
-from Emulate.registers import PSR, Register
-from Emulate.memory import Memory
+from .registers import PSR, Register
+from .memory import Memory
 from Execute.execute import Execute
 from Decode.arm_template import arm
 from Decode.t16_template import t16
@@ -49,15 +49,11 @@ class Emulate(object):
         if decode:
             action(decode)
 
-    def step(self, count=1, action=None):
-        if not action:
-            raise Exception('Must supply an action')
+    def step(self, action, count=1):
         for _ in range(count):
             self._decode(action)
 
-    def loop(self, action=None):
-        if not action:
-            raise Exception('Must supply an action')
+    def loop(self, action):
         while True:
             self._decode(action)
 
@@ -126,10 +122,13 @@ class ProcessMode(object):
             # FIXME: initializing banked registers as zeros - should they be initialized as 0xDEADDEAD?
             self.__dict__[mode_name].banked_registers = [0] * process_mode_lookup[mode_name]['banked_registers'][1]
 
+        # FIXME: What is this being used for? If it is not needed, get rid of it!
         self.mode_lookup = {}
         for item in self.__dict__.values():
-            if hasattr(item, 'mode_bits'):
+            try:
                 self.mode_lookup[item.mode_bits] = item
+            except (AttributeError, KeyError):
+                pass
 
         # initiate into SVC mode
         self.current_mode = self.SVC

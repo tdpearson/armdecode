@@ -67,28 +67,16 @@ class PSR(object):
 
 
 class Register(list):
+    _map = {"R0": 0, "R1": 1, "R2": 2, "R3": 3, "R4": 4, "R5": 5, "R6": 6, "R7": 7, "R8": 8,
+            "R9": 9, "R10": 10, "R11": 11, "R12": 12, "R13": 13, "R14": 14, "R15": 15,
+            "SP": 13, "LR": 14, "PC": 15}
+
     def __init__(self, *args, **kwds):
         super(self.__class__, self).__init__(*args, **kwds)
         self.extend([0] * 16)
 
     def __getattr__(self, key):
-        if key.upper() in ["R0", "R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8",
-                           "R9", "R10", "R11", "R12", "R13", "R14", "R15"]:
-            return self[int(key[1:])]
-        if key.upper() == "SP":
-            return self[13]
-        if key.upper() == "LR":
-            return self[14]
-        if key.upper() == "PC":
-            return self[15]
+        return self[self._map[key]]
 
     def __setattr__(self, key, value):
-        if key.upper() in ["R0", "R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8",
-                           "R9", "R10", "R11", "R12", "R13", "R14", "R15"]:
-            self[int(key[1:])] = value
-        if key.upper() == "SP":
-            self[13] = value
-        if key.upper() == "LR":
-            self[14] = value
-        if key.upper() == "PC":
-            self[15] = value
+        self[self._map[key]] = value
